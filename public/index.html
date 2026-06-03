@@ -1,204 +1,448 @@
+is photo ko pehle background clear karo fir ye sunny matta ki photo ko front end pe top center pe lagado pehle mujh dikha do photo edit kar ke background white with flower hona chahiye
+Edit
+Edit
+Edit
+ye error a raha hai render pe
+error
+postgresql option nahi dikh rahi 
+
+Agar Environment tab me ADMIN_USER aur ADMIN_PASS dikh nahi rahe, to iska matlab hai abhi tak add hi nahi kiye gaye.
+
+Add karne ke steps
+Apna Web Service open karo (sunny-contribution).
+Left menu ya top tabs me Environment kholo.
+Neeche Add Environment Variable ya Add Secret File/Variable button dhoondo.
+Ek-ek karke ye add karo:
+Key: DATABASE_URL
+Value: (Internal Database URL jo database se copy kiya)
+Key: ADMIN_USER
+Value: admin
+Key: ADMIN_PASS
+Value: Rock@123
+Save Changes karo.
+Fir:
+Manual Deploy
+→ Deploy Latest Commit
+Agar Environment tab hi nahi mil raha
+
+Mujhe sunny-contribution service ka screenshot bhejo jisme tabs dikh rahe ho (Overview, Logs, Events, Environment, etc.).
+
+Main screenshot dekh kar exact bata dunga kis button par click karna hai.
+
+fail ho gaya deploy 
+
+Deploy abhi bhi DATABASE_URL missing/wrong ki wajah se fail ho raha hai. Log me app 127.0.0.1:5432 pe connect kar raha hai, matlab Render ko database URL mila hi nahi.
+
+Ab exact karo
+Top left me sunny-contribution ke naam ke paas jo small arrow/dropdown hai, usko click karo.
+Left side menu me Environment dhoondo.
+Environment me Add Environment Variable click karo.
+Add karo:
+DATABASE_URL = exhibition-db ka Internal Database URL
+ADMIN_USER = admin
+ADMIN_PASS = Rock@123
+Save Changes click karo.
+Manual Deploy → Clear build cache & deploy karo.
+Important
+
+DATABASE_URL ki value me ye nahi dalna:
+
+dpg-d88dv...
+
+Isme poora URL dalna hai jo aisa start hota hai:
+
+postgresql://
+
+Internal Database URL ke saamne eye icon pe click karke copy icon dabao, wahi paste karo.
+
+WEBPAGE Ban gaya ab ye batao admin kaise login karega kahan se data dekh payega ?
+
+Agar webpage successfully live ho gaya hai, to admin login ka URL ye hoga:
+
+Admin Login Page
+https://your-website-url.onrender.com/admin
+
+Example:
+
+https://sunny-contribution.onrender.com/admin
+Login Details
+Username: admin
+Password: Rock@123
+Admin Dashboard me kya dikhega?
+
+✅ Total Amount Collected
+
+✅ Total Contributors
+
+✅ Pending Approvals
+
+✅ Name
+
+✅ Company Name
+
+✅ City
+
+✅ Mobile Number
+
+✅ Amount
+
+✅ Date & Time
+
+✅ Approve Button
+
+✅ Download Excel Button
+
+Workflow
+User QR scan karke payment karega.
+Form fill karega.
+Entry admin dashboard me Pending dikhegi.
+Admin payment verify karega.
+Approve button click karega.
+Uske baad contributor ka naam public page ke "Contributors" section me show ho jayega.
+Agar /admin open nahi ho raha
+
+Mujhe apni website ka URL bhejo, jaise:
+
+https://xxxxx.onrender.com
+
+Main check karke exact admin URL aur login flow bata dunga.
+
+frontend me ye list column wise banao with serial number and backend admin page mein entry delete aur amount ko edit karne ki option bhi chahiye ye pura code edit kar ke do jo mein copy paste kar saku
+Thought for 4s
+
+Haan, ye 2 files replace karo.
+
+1. public/index.html replace karo
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Contribution for Sunny Matta</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    *{box-sizing:border-box}
-    body{
-      font-family:Arial, sans-serif;
-      background:#fff;
-      margin:0;
-      padding:20px;
-      color:#222;
-      text-align:center;
-      background-image:
-        radial-gradient(circle at top left, rgba(237,242,233,.8), transparent 35%),
-        radial-gradient(circle at bottom right, rgba(237,242,233,.8), transparent 35%);
-    }
-    .page{
-      max-width:720px;
-      margin:auto;
-      text-align:center;
-    }
-    .photo{
-      width:250px;
-      max-width:90%;
-      border-radius:18px;
-      box-shadow:0 8px 25px rgba(0,0,0,.15);
-      margin:10px auto 20px;
-      display:block;
-    }
-    h1{
-      color:#2b5737;
-      margin:5px 0;
-      font-size:42px;
-      letter-spacing:1px;
-    }
-    h3{
-      color:#2b5737;
-      margin:0;
-      letter-spacing:2px;
-      font-size:18px;
-    }
-    .line{
-      width:260px;
-      height:1px;
-      background:#d5b76b;
-      margin:10px auto 20px;
-    }
-    .qr{
-      width:230px;
-      max-width:80%;
-      background:white;
-      padding:10px;
-      border-radius:16px;
-      box-shadow:0 5px 20px rgba(0,0,0,.12);
-      margin:14px auto;
-      display:block;
-    }
-    .form-card{
-      max-width:520px;
-      margin:25px auto;
-      background:rgba(255,255,255,.95);
-      border:1px solid #ddd;
-      border-radius:16px;
-      padding:20px;
-      box-shadow:0 8px 24px rgba(0,0,0,.08);
-      text-align:center;
-    }
-    label{
-      display:block;
-      text-align:center;
-      font-weight:bold;
-      margin-top:12px;
-      color:#333;
-    }
-    input{
-      width:100%;
-      padding:13px;
-      margin:7px auto;
-      border-radius:9px;
-      border:1px solid #ccc;
-      font-size:16px;
-      text-align:center;
-    }
-    button{
-      width:100%;
-      padding:14px;
-      margin-top:14px;
-      border-radius:10px;
-      background:#245b35;
-      color:#fff;
-      border:none;
-      font-size:17px;
-      font-weight:bold;
-      cursor:pointer;
-    }
-    .note{
-      max-width:520px;
-      margin:8px auto;
-      color:#555;
-      line-height:1.5;
-      font-size:15px;
-    }
-    .contact{
-      font-size:18px;
-      color:#111;
-      font-weight:bold;
-    }
-    .contributors{
-      max-width:520px;
-      margin:30px auto;
-      background:#fff;
-      border-radius:16px;
-      padding:20px;
-      box-shadow:0 8px 24px rgba(0,0,0,.08);
-      border:1px solid #eee;
-    }
-    .contributor-item{
-      padding:12px;
-      border-bottom:1px solid #eee;
-      text-align:center;
-    }
-    .contributor-item:last-child{border-bottom:0}
-    .contributor-item b{color:#245b35}
-  </style>
+<meta charset="UTF-8">
+<title>Contribution for Sunny Matta</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{font-family:Arial;background:#fff;margin:0;padding:20px;text-align:center}
+.page{max-width:720px;margin:auto}
+.photo{width:250px;max-width:90%;border-radius:18px;box-shadow:0 8px 25px #ccc}
+h1{color:#2b5737;font-size:42px}
+.qr{width:230px;border-radius:16px;margin:15px}
+.form-card,.contributors{max-width:560px;margin:25px auto;background:#fff;padding:20px;border-radius:16px;box-shadow:0 8px 24px #ddd}
+input,button{width:100%;padding:13px;margin:8px 0;border-radius:9px;border:1px solid #ccc;text-align:center;font-size:16px}
+button{background:#245b35;color:white;font-weight:bold;border:0}
+.note{color:#555}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border-bottom:1px solid #ddd;padding:10px;text-align:center}
+th{background:#245b35;color:white}
+</style>
 </head>
+
 <body>
-
 <div class="page">
-  <img src="sunny-matta.png" class="photo" alt="Sunny Matta">
 
-  <h3>CONTRIBUTION FOR</h3>
-  <h1>SUNNY MATTA</h1>
-  <div class="line"></div>
+<img src="sunny-matta.png" class="photo">
 
-  <p class="note">We are collecting support for Sunny Matta's family. Please scan the QR code and submit your details.</p>
+<h3>CONTRIBUTION FOR</h3>
+<h1>SUNNY MATTA</h1>
 
-  <img src="qr.png" class="qr" alt="Bank QR Code">
-  <p class="note">💛 Scan QR and make contribution 💛</p>
+<p class="note">We are collecting support for Sunny Matta's family.</p>
 
-  <div class="form-card">
-    <form action="/submit" method="POST">
-      <label>Name</label>
-      <input name="name" placeholder="Enter your name" required>
+<img src="qr.png" class="qr">
+<p>💛 Scan QR and make contribution 💛</p>
 
-      <label>Company Name</label>
-      <input name="company" placeholder="Enter your company name" required>
+<div class="form-card">
+<form action="/submit" method="POST">
+<input name="name" placeholder="Name" required>
+<input name="company" placeholder="Company Name" required>
+<input name="city" placeholder="City" required>
+<input name="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" maxlength="10" required>
+<input name="amount" type="number" placeholder="Amount ₹" required>
+<button type="submit">SUBMIT DETAILS</button>
+</form>
+</div>
 
-      <label>City</label>
-      <input name="city" placeholder="Enter your city" required>
+<p class="note">Payment approve hone ke baad naam list me show hoga.</p>
+<p><b>Confirmation: +91 8851235015</b></p>
 
-      <label>Mobile Number</label>
-      <input name="mobile" type="tel" placeholder="Enter 10 digit mobile number" pattern="[0-9]{10}" maxlength="10" required>
+<div class="contributors">
+<h2>🌸 Contributors 🌸</h2>
+<p class="note">Approved contributors list</p>
 
-      <label>Amount ₹</label>
-      <input name="amount" type="number" min="1" step="1" placeholder="Enter amount" required>
+<table>
+<thead>
+<tr>
+<th>S.No</th>
+<th>Name</th>
+<th>Company</th>
+<th>City</th>
+</tr>
+</thead>
+<tbody id="contributorsList">
+<tr><td colspan="4">Loading...</td></tr>
+</tbody>
+</table>
+</div>
 
-      <button type="submit">SUBMIT DETAILS</button>
-    </form>
-  </div>
-
-  <p class="note">
-    Aapki payment approve hone ke baad aapka naam contributors list me show ho jayega.
-  </p>
-  <p class="note">Confirmation ke liye sampark kare:</p>
-  <p class="contact">+91 8851235015</p>
-
-  <div class="contributors">
-    <h2>🌸 Contributors 🌸</h2>
-    <p class="note">Payment approval ke baad naam yahan show hoga.</p>
-    <div id="contributorsList">Loading...</div>
-  </div>
 </div>
 
 <script>
 async function loadContributors(){
-  try{
-    const res = await fetch("/contributors");
-    const data = await res.json();
-    const box = document.getElementById("contributorsList");
+  const res = await fetch("/contributors");
+  const data = await res.json();
+  const box = document.getElementById("contributorsList");
 
-    if(!data.length){
-      box.innerHTML = "<p>No approved contributors yet.</p>";
-      return;
-    }
-
-    box.innerHTML = data.map(item => `
-      <div class="contributor-item">
-        <b>${item.name}</b><br>
-        ${item.company}<br>
-        ${item.city}
-      </div>
-    `).join("");
-  } catch(e){
-    document.getElementById("contributorsList").innerHTML = "<p>Unable to load contributors.</p>";
+  if(!data.length){
+    box.innerHTML = "<tr><td colspan='4'>No approved contributors yet.</td></tr>";
+    return;
   }
+
+  box.innerHTML = data.map((item,index)=>`
+    <tr>
+      <td>${index+1}</td>
+      <td><b>${item.name}</b></td>
+      <td>${item.company}</td>
+      <td>${item.city}</td>
+    </tr>
+  `).join("");
 }
 loadContributors();
 </script>
 
 </body>
 </html>
+2. server.js replace karo
+const express = require("express");
+const { Pool } = require("pg");
+const XLSX = require("xlsx");
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+const ADMIN_USER = process.env.ADMIN_USER || "admin";
+const ADMIN_PASS = process.env.ADMIN_PASS || "Rock@123";
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static("public"));
+
+async function initDB(){
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS sunny_matta_contributions (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      company TEXT NOT NULL,
+      city TEXT NOT NULL,
+      mobile TEXT NOT NULL,
+      amount NUMERIC(12,2) NOT NULL,
+      approved BOOLEAN DEFAULT FALSE,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+}
+
+function formatINR(v){
+  return "₹" + Number(v || 0).toLocaleString("en-IN");
+}
+
+function safe(v){
+  return String(v || "").replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[m]));
+}
+
+app.get("/contributors", async(req,res)=>{
+  const result = await pool.query(`
+    SELECT name, company, city 
+    FROM sunny_matta_contributions 
+    WHERE approved = TRUE 
+    ORDER BY id DESC
+  `);
+  res.json(result.rows);
+});
+
+app.post("/submit", async(req,res)=>{
+  const {name, company, city, mobile, amount} = req.body;
+
+  await pool.query(`
+    INSERT INTO sunny_matta_contributions
+    (name, company, city, mobile, amount, approved)
+    VALUES ($1,$2,$3,$4,$5,FALSE)
+  `,[name, company, city, mobile, amount]);
+
+  res.send(`
+  <div style="font-family:Arial;text-align:center;padding:30px">
+    <h2>Thank You</h2>
+    <p>Your details submitted successfully.</p>
+    <p>Aapki payment approve hone ke baad aapka naam contributors list me show ho jayega.</p>
+    <p><b>Confirmation ke liye sampark kare: +91 8851235015</b></p>
+    <a href="/">Back to Form</a>
+  </div>
+  `);
+});
+
+app.get("/admin", async(req,res)=>{
+  const {user, pass} = req.query;
+
+  if(user !== ADMIN_USER || pass !== ADMIN_PASS){
+    return res.send(`
+    <div style="font-family:Arial;max-width:400px;margin:50px auto;text-align:center">
+      <h2>Admin Login</h2>
+      <form>
+        <input name="user" placeholder="Username" style="width:100%;padding:12px;margin:8px"><br>
+        <input name="pass" type="password" placeholder="Password" style="width:100%;padding:12px;margin:8px"><br>
+        <button style="padding:12px 30px">Login</button>
+      </form>
+    </div>
+    `);
+  }
+
+  const data = await pool.query(`
+    SELECT * FROM sunny_matta_contributions ORDER BY id DESC
+  `);
+
+  const stats = await pool.query(`
+    SELECT 
+    COALESCE(SUM(CASE WHEN approved THEN amount ELSE 0 END),0) total,
+    COUNT(*) FILTER (WHERE approved = TRUE) approved_count,
+    COUNT(*) FILTER (WHERE approved = FALSE) pending_count
+    FROM sunny_matta_contributions
+  `);
+
+  const rows = data.rows.map((i,n)=>`
+    <tr>
+      <td>${n+1}</td>
+      <td>${safe(i.name)}</td>
+      <td>${safe(i.company)}</td>
+      <td>${safe(i.city)}</td>
+      <td>${safe(i.mobile)}</td>
+
+      <td>
+        <form method="POST" action="/edit-amount">
+          <input type="hidden" name="id" value="${i.id}">
+          <input type="hidden" name="user" value="${user}">
+          <input type="hidden" name="pass" value="${pass}">
+          <input name="amount" value="${i.amount}" style="width:80px;text-align:center">
+          <button>Save</button>
+        </form>
+      </td>
+
+      <td>${i.approved ? "Approved" : "Pending"}</td>
+
+      <td>
+        ${i.approved ? "" : `
+        <form method="POST" action="/approve">
+          <input type="hidden" name="id" value="${i.id}">
+          <input type="hidden" name="user" value="${user}">
+          <input type="hidden" name="pass" value="${pass}">
+          <button>Approve</button>
+        </form>`}
+      </td>
+
+      <td>
+        <form method="POST" action="/delete">
+          <input type="hidden" name="id" value="${i.id}">
+          <input type="hidden" name="user" value="${user}">
+          <input type="hidden" name="pass" value="${pass}">
+          <button style="background:red;color:white">Delete</button>
+        </form>
+      </td>
+    </tr>
+  `).join("");
+
+  res.send(`
+  <html>
+  <head>
+  <style>
+  body{font-family:Arial;background:#f4f4f4;padding:20px;text-align:center}
+  .card{background:white;padding:20px;border-radius:12px;margin-bottom:20px}
+  table{width:100%;border-collapse:collapse;background:white}
+  th,td{border:1px solid #ddd;padding:8px;text-align:center}
+  th{background:#222;color:white}
+  button{padding:6px 10px;border:0;background:#245b35;color:white;border-radius:5px}
+  </style>
+  </head>
+  <body>
+
+  <div class="card">
+    <h2>Sunny Matta Contribution Admin</h2>
+    <h3>Total Approved Amount: ${formatINR(stats.rows[0].total)}</h3>
+    <p>Approved: ${stats.rows[0].approved_count} | Pending: ${stats.rows[0].pending_count}</p>
+    <a href="/download-excel?user=${user}&pass=${pass}">
+      <button>Download Excel</button>
+    </a>
+  </div>
+
+  <table>
+    <tr>
+      <th>S.No</th>
+      <th>Name</th>
+      <th>Company</th>
+      <th>City</th>
+      <th>Mobile</th>
+      <th>Amount Edit</th>
+      <th>Status</th>
+      <th>Approve</th>
+      <th>Delete</th>
+    </tr>
+    ${rows}
+  </table>
+
+  </body>
+  </html>
+  `);
+});
+
+app.post("/approve", async(req,res)=>{
+  const {id,user,pass} = req.body;
+  await pool.query("UPDATE sunny_matta_contributions SET approved=TRUE WHERE id=$1",[id]);
+  res.redirect(`/admin?user=${user}&pass=${pass}`);
+});
+
+app.post("/edit-amount", async(req,res)=>{
+  const {id,amount,user,pass} = req.body;
+  await pool.query("UPDATE sunny_matta_contributions SET amount=$1 WHERE id=$2",[amount,id]);
+  res.redirect(`/admin?user=${user}&pass=${pass}`);
+});
+
+app.post("/delete", async(req,res)=>{
+  const {id,user,pass} = req.body;
+  await pool.query("DELETE FROM sunny_matta_contributions WHERE id=$1",[id]);
+  res.redirect(`/admin?user=${user}&pass=${pass}`);
+});
+
+app.get("/download-excel", async(req,res)=>{
+  const {user,pass} = req.query;
+  if(user !== ADMIN_USER || pass !== ADMIN_PASS) return res.send("Unauthorized");
+
+  const result = await pool.query(`
+    SELECT name, company, city, mobile, amount, approved, created_at
+    FROM sunny_matta_contributions ORDER BY id ASC
+  `);
+
+  const excelData = [
+    ["Name","Company","City","Mobile","Amount","Status","Date"],
+    ...result.rows.map(i=>[
+      i.name,i.company,i.city,i.mobile,Number(i.amount),
+      i.approved ? "Approved" : "Pending",
+      i.created_at
+    ])
+  ];
+
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(excelData);
+  XLSX.utils.book_append_sheet(wb,ws,"Contributions");
+
+  const buffer = XLSX.write(wb,{type:"buffer",bookType:"xlsx"});
+  res.setHeader("Content-Disposition","attachment; filename=Sunny_Matta_Contribution.xlsx");
+  res.send(buffer);
+});
+
+initDB().then(()=>{
+  app.listen(PORT,()=>console.log("Server running on " + PORT));
+});
+
+Upload ke baad Render me Manual Deploy → Deploy latest commit karo.
