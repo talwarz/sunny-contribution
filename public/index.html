@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Contribution for Sunny Matta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    *{box-sizing:border-box}
+    body{
+      font-family:Arial, sans-serif;
+      background:#fff;
+      margin:0;
+      padding:20px;
+      color:#222;
+      text-align:center;
+      background-image:
+        radial-gradient(circle at top left, rgba(237,242,233,.8), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(237,242,233,.8), transparent 35%);
+    }
+    .page{
+      max-width:720px;
+      margin:auto;
+      text-align:center;
+    }
+    .photo{
+      width:250px;
+      max-width:90%;
+      border-radius:18px;
+      box-shadow:0 8px 25px rgba(0,0,0,.15);
+      margin:10px auto 20px;
+      display:block;
+    }
+    h1{
+      color:#2b5737;
+      margin:5px 0;
+      font-size:42px;
+      letter-spacing:1px;
+    }
+    h3{
+      color:#2b5737;
+      margin:0;
+      letter-spacing:2px;
+      font-size:18px;
+    }
+    .line{
+      width:260px;
+      height:1px;
+      background:#d5b76b;
+      margin:10px auto 20px;
+    }
+    .qr{
+      width:230px;
+      max-width:80%;
+      background:white;
+      padding:10px;
+      border-radius:16px;
+      box-shadow:0 5px 20px rgba(0,0,0,.12);
+      margin:14px auto;
+      display:block;
+    }
+    .form-card{
+      max-width:520px;
+      margin:25px auto;
+      background:rgba(255,255,255,.95);
+      border:1px solid #ddd;
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 8px 24px rgba(0,0,0,.08);
+      text-align:center;
+    }
+    label{
+      display:block;
+      text-align:center;
+      font-weight:bold;
+      margin-top:12px;
+      color:#333;
+    }
+    input{
+      width:100%;
+      padding:13px;
+      margin:7px auto;
+      border-radius:9px;
+      border:1px solid #ccc;
+      font-size:16px;
+      text-align:center;
+    }
+    button{
+      width:100%;
+      padding:14px;
+      margin-top:14px;
+      border-radius:10px;
+      background:#245b35;
+      color:#fff;
+      border:none;
+      font-size:17px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+    .note{
+      max-width:520px;
+      margin:8px auto;
+      color:#555;
+      line-height:1.5;
+      font-size:15px;
+    }
+    .contact{
+      font-size:18px;
+      color:#111;
+      font-weight:bold;
+    }
+    .contributors{
+      max-width:520px;
+      margin:30px auto;
+      background:#fff;
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 8px 24px rgba(0,0,0,.08);
+      border:1px solid #eee;
+    }
+    .contributor-item{
+      padding:12px;
+      border-bottom:1px solid #eee;
+      text-align:center;
+    }
+    .contributor-item:last-child{border-bottom:0}
+    .contributor-item b{color:#245b35}
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <img src="sunny-matta.png" class="photo" alt="Sunny Matta">
+
+  <h3>CONTRIBUTION FOR</h3>
+  <h1>SUNNY MATTA</h1>
+  <div class="line"></div>
+
+  <p class="note">We are collecting support for Sunny Matta's family. Please scan the QR code and submit your details.</p>
+
+  <img src="qr.png" class="qr" alt="Bank QR Code">
+  <p class="note">💛 Scan QR and make contribution 💛</p>
+
+  <div class="form-card">
+    <form action="/submit" method="POST">
+      <label>Name</label>
+      <input name="name" placeholder="Enter your name" required>
+
+      <label>Company Name</label>
+      <input name="company" placeholder="Enter your company name" required>
+
+      <label>City</label>
+      <input name="city" placeholder="Enter your city" required>
+
+      <label>Mobile Number</label>
+      <input name="mobile" type="tel" placeholder="Enter 10 digit mobile number" pattern="[0-9]{10}" maxlength="10" required>
+
+      <label>Amount ₹</label>
+      <input name="amount" type="number" min="1" step="1" placeholder="Enter amount" required>
+
+      <button type="submit">SUBMIT DETAILS</button>
+    </form>
+  </div>
+
+  <p class="note">
+    Aapki payment approve hone ke baad aapka naam contributors list me show ho jayega.
+  </p>
+  <p class="note">Confirmation ke liye sampark kare:</p>
+  <p class="contact">+91 8851235015</p>
+
+  <div class="contributors">
+    <h2>🌸 Contributors 🌸</h2>
+    <p class="note">Payment approval ke baad naam yahan show hoga.</p>
+    <div id="contributorsList">Loading...</div>
+  </div>
+</div>
+
+<script>
+async function loadContributors(){
+  try{
+    const res = await fetch("/contributors");
+    const data = await res.json();
+    const box = document.getElementById("contributorsList");
+
+    if(!data.length){
+      box.innerHTML = "<p>No approved contributors yet.</p>";
+      return;
+    }
+
+    box.innerHTML = data.map(item => `
+      <div class="contributor-item">
+        <b>${item.name}</b><br>
+        ${item.company}<br>
+        ${item.city}
+      </div>
+    `).join("");
+  } catch(e){
+    document.getElementById("contributorsList").innerHTML = "<p>Unable to load contributors.</p>";
+  }
+}
+loadContributors();
+</script>
+
+</body>
+</html>
